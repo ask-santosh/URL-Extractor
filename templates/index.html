@@ -1,0 +1,46 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Long task</title>
+    <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script type="text/javascript" charset="utf-8">
+         $(document).on('click', '.widget input', function (event) {
+            namespace = '/test';
+            var socket = io(namespace);
+
+            socket.on('connect', function() {
+                $('#messages').append('<p>' + $('<div/>').text('Requesting task to run').html() + '</p>');
+                socket.emit('do_task', {count: '10'});
+            });
+            socket.on('task_update', function(msg, cb) {
+                $('#messages').append('<p>' + $('<div/>').text(msg.data).html() + '</p>');
+                if (cb)
+                    cb();
+            });
+            socket.on('task_done', function(msg, cb) {
+                $('#messages').append('<p>Result' + $('<div/>').text(msg.result).html() + '</p>');
+                if (cb)
+                    cb();
+            });
+            event.preventDefault();
+        });
+    </script>
+</head>
+<body>
+    <div class="widget">
+        <input type="file">
+        <input id="clickme" type="submit" value="Click me" />
+    </div>
+    <h3>Messages</h3>
+    <div id="messages" ></div>
+<script>
+
+    $('#messages').on('DOMSubtreeModified', function(){
+        console.log($("#messages :last"));
+        $("#messages :last")[0].scrollIntoView({ behavior: 'smooth' });
+    });
+
+</script>
+</body>
+</html>
