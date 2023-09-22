@@ -122,4 +122,4 @@ def run_lengthy_task(data):
 
 
 if __name__ == '__main__':
-    socket_.run(app, host='0.0.0.0', port=80, debug=True, allow_unsafe_werkzeug=True)
+    socket_.run(app, host='0.0.0.0.0', port=8000, debug=True, allow_unsafe_werkzeug=True)
